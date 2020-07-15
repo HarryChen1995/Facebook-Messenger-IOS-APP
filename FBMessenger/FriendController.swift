@@ -8,36 +8,71 @@
 
 import UIKit
 
+
 class FriendController:  UICollectionViewController, UICollectionViewDelegateFlowLayout{
+    
+    
+    var messages: [Message]?
+
+    
     let cellID = "cellID"
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
-        collectionView.register(FriendCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView.register(MessageCell.self, forCellWithReuseIdentifier: cellID)
         collectionView.alwaysBounceVertical = true
         navigationItem.title = "Recent"
+        setupData()
     }
 
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-                return 3
+        return messages?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath)
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! MessageCell
+        if let message = messages?[indexPath.item]{
+            cell.message = message
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 100)
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let layout = UICollectionViewFlowLayout()
+        let controller = ChatLogController(collectionViewLayout:layout)
+        controller.friend = messages?[indexPath.item].friend
+        navigationController?.pushViewController(controller, animated: true)
+    }
 
 }
 
-class FriendCell : BaseCell{
+class MessageCell : BaseCell{
     
-    let progileImageView : UIImageView =  {
+    
+    var message : Message? {
+        didSet{
+            nameLabel.text = message?.friend?.name
+            
+            if   let imageName = message?.friend?.profileImageName {
+            profileImageView.image = UIImage(named: imageName)
+            hasReadImageView.image = UIImage(named: imageName)
+        }
+            messageLabel.text = message?.text
+            
+            if let date = message?.date {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "hh:mm a"
+                timeLabel.text = dateFormatter.string(from: date)
+            }
+     }
+    }
+    
+    let profileImageView : UIImageView =  {
         
         let img_view = UIImageView()
         img_view.contentMode = .scaleAspectFill
@@ -89,16 +124,16 @@ class FriendCell : BaseCell{
         return img_view
     }()
     override func setupView() {
-        addSubview(progileImageView)
+        addSubview(profileImageView)
         addSubview(divider)
         setupContainerView()
-        progileImageView.image = UIImage(named: "zuckprofile")
+        profileImageView.image = UIImage(named: "zuckprofile")
         hasReadImageView.image = UIImage(named: "zuckprofile")
         
-        addConstraintsWithFormat(format: "H:|-12-[v0(68)]", views: progileImageView)
-        addConstraintsWithFormat(format: "V:[v0(68)]", views: progileImageView)
+        addConstraintsWithFormat(format: "H:|-12-[v0(68)]", views: profileImageView)
+        addConstraintsWithFormat(format: "V:[v0(68)]", views: profileImageView)
         
-        addConstraint(NSLayoutConstraint(item: progileImageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: profileImageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
         
         addConstraintsWithFormat(format: "H:|-83-[v0]|", views: divider)
         addConstraintsWithFormat(format: "V:[v0(1)]|", views: divider)

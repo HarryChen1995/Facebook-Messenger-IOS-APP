@@ -7,23 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3161E67124BF8F3C00F194F0 /* FriendsControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3161E67024BF8F3C00F194F0 /* FriendsControllerHelper.swift */; };
+		3161E69824BF99EC00F194F0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3161E69624BF99EC00F194F0 /* Model.xcdatamodeld */; };
 		31A61DE424BF6FE0005B16AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A61DE324BF6FE0005B16AB /* AppDelegate.swift */; };
 		31A61DE624BF6FE0005B16AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A61DE524BF6FE0005B16AB /* SceneDelegate.swift */; };
 		31A61DE824BF6FE0005B16AB /* FriendController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A61DE724BF6FE0005B16AB /* FriendController.swift */; };
-		31A61DEE24BF6FE0005B16AB /* FBMessenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 31A61DEC24BF6FE0005B16AB /* FBMessenger.xcdatamodeld */; };
 		31A61DF024BF6FE3005B16AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31A61DEF24BF6FE3005B16AB /* Assets.xcassets */; };
 		31A61DF324BF6FE3005B16AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31A61DF124BF6FE3005B16AB /* LaunchScreen.storyboard */; };
+		31D7A2A224BFB69700B34042 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D7A2A124BFB69700B34042 /* ChatLogController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3161E67024BF8F3C00F194F0 /* FriendsControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsControllerHelper.swift; sourceTree = "<group>"; };
+		3161E69724BF99EC00F194F0 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		31A61DE024BF6FE0005B16AB /* FBMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FBMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31A61DE324BF6FE0005B16AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		31A61DE524BF6FE0005B16AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		31A61DE724BF6FE0005B16AB /* FriendController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendController.swift; sourceTree = "<group>"; };
-		31A61DED24BF6FE0005B16AB /* FBMessenger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FBMessenger.xcdatamodel; sourceTree = "<group>"; };
 		31A61DEF24BF6FE3005B16AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31A61DF224BF6FE3005B16AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		31A61DF424BF6FE3005B16AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		31D7A2A124BFB69700B34042 /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,11 +62,13 @@
 			children = (
 				31A61DE324BF6FE0005B16AB /* AppDelegate.swift */,
 				31A61DE524BF6FE0005B16AB /* SceneDelegate.swift */,
+				3161E67024BF8F3C00F194F0 /* FriendsControllerHelper.swift */,
 				31A61DE724BF6FE0005B16AB /* FriendController.swift */,
+				31D7A2A124BFB69700B34042 /* ChatLogController.swift */,
 				31A61DEF24BF6FE3005B16AB /* Assets.xcassets */,
 				31A61DF124BF6FE3005B16AB /* LaunchScreen.storyboard */,
 				31A61DF424BF6FE3005B16AB /* Info.plist */,
-				31A61DEC24BF6FE0005B16AB /* FBMessenger.xcdatamodeld */,
+				3161E69624BF99EC00F194F0 /* Model.xcdatamodeld */,
 			);
 			path = FBMessenger;
 			sourceTree = "<group>";
@@ -137,10 +143,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31D7A2A224BFB69700B34042 /* ChatLogController.swift in Sources */,
 				31A61DE824BF6FE0005B16AB /* FriendController.swift in Sources */,
-				31A61DEE24BF6FE0005B16AB /* FBMessenger.xcdatamodeld in Sources */,
 				31A61DE424BF6FE0005B16AB /* AppDelegate.swift in Sources */,
+				3161E69824BF99EC00F194F0 /* Model.xcdatamodeld in Sources */,
 				31A61DE624BF6FE0005B16AB /* SceneDelegate.swift in Sources */,
+				3161E67124BF8F3C00F194F0 /* FriendsControllerHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,13 +340,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		31A61DEC24BF6FE0005B16AB /* FBMessenger.xcdatamodeld */ = {
+		3161E69624BF99EC00F194F0 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				31A61DED24BF6FE0005B16AB /* FBMessenger.xcdatamodel */,
+				3161E69724BF99EC00F194F0 /* Model.xcdatamodel */,
 			);
-			currentVersion = 31A61DED24BF6FE0005B16AB /* FBMessenger.xcdatamodel */;
-			path = FBMessenger.xcdatamodeld;
+			currentVersion = 3161E69724BF99EC00F194F0 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
