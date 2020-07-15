@@ -92,8 +92,8 @@ class FriendCell : BaseCell{
         addSubview(progileImageView)
         addSubview(divider)
         setupContainerView()
-        progileImageView.image = UIImage(named: "mark")
-        hasReadImageView.image = UIImage(named: "mark")
+        progileImageView.image = UIImage(named: "zuckprofile")
+        hasReadImageView.image = UIImage(named: "zuckprofile")
         
         addConstraintsWithFormat(format: "H:|-12-[v0(68)]", views: progileImageView)
         addConstraintsWithFormat(format: "V:[v0(68)]", views: progileImageView)
