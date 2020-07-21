@@ -51,11 +51,16 @@ extension  FriendController {
         let steve = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
         steve.name = "Steve Jobs"
         steve.profileImageName = "steve_profile"
+        
+            
+        createMessageWithText(text: "Good Morning", friend: steve,minuteAgo:  2 , context: context)
+        createMessageWithText(text: "Hello How are You, Hope you are having a good morning", friend: steve, minuteAgo: 1,  context: context)
+        createMessageWithText(text: "Are you interested in buying a new Apple device, we have a varities of devives that will suit your needs. Please make your purchase with us.", friend: steve,minuteAgo: 0,  context: context)
             
         let trump = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
         trump.name = "Donald Trump"
         trump.profileImageName = "donald_trump_profile"
-        
+        createMessageWithText(text: "You are fire", friend: trump,minuteAgo:  5 , context: context)
 
         let gandhi = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
         gandhi.name = "Mhatma Gandhi"
@@ -71,13 +76,7 @@ extension  FriendController {
             
         createMessageWithText(text: "Please vote for me", friend: hillary, minuteAgo: 8*60*24, context: context)
 
-            
-            
-        createMessageWithText(text: "Good Morning", friend: steve,minuteAgo:  2 , context: context)
-        createMessageWithText(text: "Hello How are You", friend: steve, minuteAgo: 1,  context: context)
-        createMessageWithText(text: "Are you interested in buying a new iphone", friend: steve,minuteAgo: 0,  context: context)
-            
-         createMessageWithText(text: "You are fire", friend: trump,minuteAgo:  5 , context: context)
+        
         
             do {
                 try context.save()
@@ -116,8 +115,6 @@ extension  FriendController {
             if  let friends = fetchFreinds() {
                 messages = [Message]()
                 for friend in friends {
-                    print(friend.name)
-                  
                   do {
                       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Message")
                       fetchRequest.sortDescriptors  = [NSSortDescriptor(key: "date", ascending: false)]
