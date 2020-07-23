@@ -34,14 +34,28 @@ class ChatLogController:  UICollectionViewController, UICollectionViewDelegateFl
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ChatLogCell
         cell.messageTextView.text = messages?[indexPath.item].text
-        if let messageText = messages?[indexPath.item].text, let profileImageName = messages?[indexPath.item].friend?.profileImageName{
+        if let message = messages?[indexPath.item], let messageText = message.text, let profileImageName = message.friend?.profileImageName{
             let size = CGSize(width:250, height:1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimateFrame = NSString(string: messageText).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], context: nil)
+            if !message.isSender{
+                
+                cell.messageTextView.frame = CGRect(x: 48+8, y: 0, width: estimateFrame.width+16, height: estimateFrame.height+20)
+                cell.textBubbleView.frame = CGRect(x: 48-10, y: -4, width: estimateFrame.width+16+8+16, height: estimateFrame.height+20+6)
+                cell.profileImageView.image = UIImage(named: profileImageName)
+                cell.profileImageView.isHidden = false
+                cell.bubbleImageView.tintColor = UIColor(white: 0.95, alpha: 1)
+            }else{
+                
+                cell.messageTextView.frame = CGRect(x: view.frame.width - estimateFrame.width-16-8-10, y: 0, width: estimateFrame.width+16, height: estimateFrame.height+20)
+                cell.textBubbleView.frame = CGRect(x: view.frame.width - estimateFrame.width-16-8-8-10, y: -4, width: estimateFrame.width+16+8+10, height: estimateFrame.height+20+6)
+                cell.bubbleImageView.image = UIImage(named: "bubble_blue")!.resizableImage(withCapInsets: UIEdgeInsets(top: 22, left: 26, bottom: 22, right: 26)).withRenderingMode(.alwaysTemplate)
+                cell.bubbleImageView.tintColor = UIColor(red:0, green:137/255, blue: 249/255, alpha:1)
+                cell.messageTextView.textColor = .white
+                cell.profileImageView.isHidden = true
+                
+            }
             
-            cell.messageTextView.frame = CGRect(x: 48+8, y: 0, width: estimateFrame.width+16, height: estimateFrame.height+20)
-            cell.textBubbleView.frame = CGRect(x: 48, y: 0, width: estimateFrame.width+16+8, height: estimateFrame.height+20)
-            cell.profileImageView.image = UIImage(named: profileImageName)
             
         }
         
@@ -79,7 +93,6 @@ class ChatLogCell : BaseCell {
         let view = UIView()
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
-        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
         return view
     }()
     let profileImageView: UIImageView = {
@@ -89,14 +102,25 @@ class ChatLogCell : BaseCell {
         imageView.layer.masksToBounds = true
         return imageView
     }()
+    let bubbleImageView: UIImageView = {
+       let view = UIImageView()
+        view.image = UIImage(named: "bubble_gray")!.resizableImage(withCapInsets: UIEdgeInsets(top: 22, left: 26, bottom: 22, right: 26)).withRenderingMode(.alwaysTemplate)
+        view.tintColor = UIColor(white: 0.90, alpha: 1)
+        return view
+    }()
     override func setupView() {
         super.setupView()
         addSubview(textBubbleView)
         addSubview(messageTextView)
         addSubview(profileImageView)
         
+        
         addConstraintsWithFormat(format: "H:|-8-[v0(30)]", views: profileImageView)
         addConstraintsWithFormat(format: "V:[v0(30)]|", views: profileImageView)
         profileImageView.backgroundColor = .red
+        
+        textBubbleView.addSubview(bubbleImageView)
+        textBubbleView.addConstraintsWithFormat(format: "H:|[v0]|", views: bubbleImageView)
+        textBubbleView.addConstraintsWithFormat(format: "V:|[v0]|", views: bubbleImageView)
     }
 }

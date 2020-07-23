@@ -47,16 +47,8 @@ extension  FriendController {
         message.text = "Hello, my name is Mark, Nice to meet you  ..."
         message.date = Date()
         
+        createSteveMessageWithContext(context:context)
         
-        let steve = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
-        steve.name = "Steve Jobs"
-        steve.profileImageName = "steve_profile"
-        
-            
-        createMessageWithText(text: "Good Morning", friend: steve,minuteAgo:  2 , context: context)
-        createMessageWithText(text: "Hello How are You, Hope you are having a good morning", friend: steve, minuteAgo: 1,  context: context)
-        createMessageWithText(text: "Are you interested in buying a new Apple device, we have a varities of devives that will suit your needs. Please make your purchase with us.", friend: steve,minuteAgo: 0,  context: context)
-            
         let trump = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
         trump.name = "Donald Trump"
         trump.profileImageName = "donald_trump_profile"
@@ -88,11 +80,12 @@ extension  FriendController {
         loadData()
         
     }
-    private func createMessageWithText(text:String, friend: Friend, minuteAgo: Double , context: NSManagedObjectContext){
+    private func createMessageWithText(text:String, friend: Friend, minuteAgo: Double , context: NSManagedObjectContext, isSender:Bool = false){
         let message  = NSEntityDescription.insertNewObject(forEntityName: "Message", into: context) as! Message
         message.friend = friend
         message.text = text
         message.date = Date().addingTimeInterval(-minuteAgo*60)
+        message.isSender = isSender
     }
     
     private func fetchFreinds() -> [Friend]? {
@@ -108,6 +101,25 @@ extension  FriendController {
         }
         return nil
      }
+    private func createSteveMessageWithContext(context: NSManagedObjectContext){
+        
+        let steve = NSEntityDescription.insertNewObject(forEntityName: "Friend", into: context) as! Friend
+        steve.name = "Steve Jobs"
+        steve.profileImageName = "steve_profile"
+        
+            
+        createMessageWithText(text: "Good Morning", friend: steve,minuteAgo:  2 , context: context)
+        createMessageWithText(text: "Hello How are You, Hope you are having a good morning", friend: steve, minuteAgo: 1,  context: context)
+        createMessageWithText(text: "Are you interested in buying a new Apple device, we have a varities of devives that will suit your needs. Please make your purchase with us.", friend: steve,minuteAgo: 0,  context: context)
+        
+        // response message
+        createMessageWithText(text: "yes I am totally looking to buy a new iphone", friend: steve,minuteAgo: 0,  context: context, isSender: true)
+        createMessageWithText(text: "Come to Apple Store!", friend: steve,minuteAgo: 0,  context: context)
+        createMessageWithText(text: "Sure!", friend: steve,minuteAgo: 0,  context: context, isSender: true)
+        
+        
+        
+    }
     func loadData(){
         let delegate = UIApplication.shared.delegate as? AppDelegate
         if let context = delegate?.persistentContainer.viewContext {
