@@ -18,14 +18,74 @@ class ChatLogController:  UICollectionViewController, UICollectionViewDelegateFl
         }
     
     }
+    
+    let messageInputContainer: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
+    }()
+    let sendButton: UIButton = {
+       let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Send", for: .normal)
+        let color = UIColor(red: 0, green: 137/255, blue: 249/255, alpha: 1)
+        button.setTitleColor(color, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        return button
+    }()
     var messages: [Message]?
+    var bottomConstraint : NSLayoutConstraint?
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
+        tabBarController?.tabBar.isHidden = true
+        collectionView.alwaysBounceVertical = true
         collectionView.register(ChatLogCell.self, forCellWithReuseIdentifier: cellID)
+        view.addSubview(messageInputContainer)
+        view.addConstraintsWithFormat(format: "H:|[v0]|" , views: messageInputContainer)
+        view.addConstraintsWithFormat(format: "V:[v0(48)]", views: messageInputContainer)
+        bottomConstraint = NSLayoutConstraint(item: messageInputContainer, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+        view.addConstraint(bottomConstraint!)
+        setupInputContainer()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardWillShowNotification, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func handleKeyboardNotification(notification: NSNotification){
+        if let userInfo = notification.userInfo{
+            let keyboardFrame  = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
+            let isKeboardShowing = notification.name == UIResponder.keyboardWillShowNotification
+            bottomConstraint?.constant = isKeboardShowing ? -(keyboardFrame?.height ?? 0) : 0
+            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {self.view.layoutIfNeeded()}, completion: {
+                (completed) in
+                if isKeboardShowing {
+                let indexPath = IndexPath(item: self.messages!.count-1, section: 0)
+                self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+                }
+            })
+        }
         
     }
-    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        inputTextField.resignFirstResponder()
+    }
+    let inputTextField : UITextField = {
+        let textfield = UITextField()
+        textfield.placeholder = "Enter Message ..."
+        return textfield
+    }()
+    private func setupInputContainer(){
+        let border = UIView()
+        border.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        messageInputContainer.addSubview(inputTextField)
+        messageInputContainer.addSubview(sendButton)
+        messageInputContainer.addSubview(border)
+        messageInputContainer.addConstraintsWithFormat(format: "H:|-8-[v0][v1(60)]|", views: inputTextField, sendButton)
+        messageInputContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: inputTextField)
+        messageInputContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: sendButton)
+        messageInputContainer.addConstraintsWithFormat(format: "H:|[v0]|", views: border)
+        messageInputContainer.addConstraintsWithFormat(format: "V:|[v0(0.5)]", views: border)
+    }
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages?.count ?? 0
     }
@@ -60,6 +120,9 @@ class ChatLogController:  UICollectionViewController, UICollectionViewDelegateFl
         }
         
         return cell 
+    }
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         

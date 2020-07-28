@@ -130,7 +130,7 @@ extension  FriendController {
                   do {
                       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Message")
                       fetchRequest.sortDescriptors  = [NSSortDescriptor(key: "date", ascending: false)]
-                      fetchRequest.predicate = NSPredicate(format: "friend.name =%@", friend.name as! String)
+                    fetchRequest.predicate = NSPredicate(format: "friend.name =%@", friend.name!)
                       fetchRequest.fetchLimit = 1
                       let fetchMessages = try context.fetch(fetchRequest) as? [Message]
                     messages?.append(contentsOf: fetchMessages!)
