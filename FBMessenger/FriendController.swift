@@ -76,9 +76,12 @@ class FriendController:  UICollectionViewController, UICollectionViewDelegateFlo
             }
         
     }
+
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if isEditing {
         if let selectCells = collectionView.indexPathsForSelectedItems, selectCells.count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
+        }
         }
     }
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -88,7 +91,13 @@ class FriendController:  UICollectionViewController, UICollectionViewDelegateFlo
         for indexPath in indexPaths {
             let cell = collectionView.cellForItem(at: indexPath) as! MessageCell
             cell.isInEditingMode = editing
+            }
+        if !editing{
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
+        
+        collectionView.reloadData()
+
         
     }
 }
@@ -183,6 +192,7 @@ class MessageCell : BaseCell{
     let checkMark: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 20)
         label.text = ""
         return label
     }()
@@ -194,7 +204,7 @@ class MessageCell : BaseCell{
     override var isSelected: Bool{
         didSet {
             if isInEditingMode {
-            checkMark.text = isSelected ? "✔️" : ""
+            checkMark.text = isSelected ? "☑" : "☐"
             }
         }
     }
@@ -214,7 +224,7 @@ class MessageCell : BaseCell{
         addConstraintsWithFormat(format: "V:[v0(1)]|", views: divider)
         
         addSubview(checkMark)
-        addConstraintsWithFormat(format: "H:[v0(30)]-10-|", views: checkMark)
+        addConstraintsWithFormat(format: "H:[v0(30)]-5-|", views: checkMark)
         addConstraintsWithFormat(format: "V:|[v0(30)]", views: checkMark)
 
         
