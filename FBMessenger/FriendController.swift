@@ -23,11 +23,28 @@ class FriendController:  UICollectionViewController, UICollectionViewDelegateFlo
         collectionView.backgroundColor = .white
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: cellID)
         collectionView.alwaysBounceVertical = true
+        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteMessage))
+        navigationItem.rightBarButtonItem?.isEnabled = false
         navigationItem.title = "Recent"
         setupData()
     }
+    @objc func deleteMessage(){
+        
+        if let   selectCellsIndexPath = collectionView.indexPathsForSelectedItems {
+        let items = selectCellsIndexPath.map { $0.item }.sorted().reversed()
+        for  item in items {
+            
+            messages?.remove(at: item)
+        }
+            collectionView.deleteItems(at: selectCellsIndexPath)
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            setEditing(false, animated: true)
+            
+    }
+        
+    }
 
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages?.count ?? 0
     }
@@ -37,6 +54,7 @@ class FriendController:  UICollectionViewController, UICollectionViewDelegateFlo
         if let message = messages?[indexPath.item]{
             cell.message = message
         }
+        cell.isInEditingMode = isEditing
         return cell
     }
     
@@ -45,12 +63,34 @@ class FriendController:  UICollectionViewController, UICollectionViewDelegateFlo
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let layout = UICollectionViewFlowLayout()
-        let controller = ChatLogController(collectionViewLayout:layout)
-        controller.friend = messages?[indexPath.item].friend
-        navigationController?.pushViewController(controller, animated: true)
+        
+        if !isEditing {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            let layout = UICollectionViewFlowLayout()
+            let controller = ChatLogController(collectionViewLayout:layout)
+            controller.friend = messages?[indexPath.item].friend
+            navigationController?.pushViewController(controller, animated: true)
+        }
+        else{
+                navigationItem.rightBarButtonItem?.isEnabled = true
+            }
+        
     }
-
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let selectCells = collectionView.indexPathsForSelectedItems, selectCells.count == 0 {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        collectionView.allowsMultipleSelection = editing
+        let indexPaths = collectionView.indexPathsForVisibleItems
+        for indexPath in indexPaths {
+            let cell = collectionView.cellForItem(at: indexPath) as! MessageCell
+            cell.isInEditingMode = editing
+        }
+        
+    }
 }
 
 class MessageCell : BaseCell{
@@ -140,6 +180,24 @@ class MessageCell : BaseCell{
         img_view.layer.masksToBounds = true
         return img_view
     }()
+    let checkMark: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        return label
+    }()
+    var isInEditingMode:Bool = false {
+        didSet {
+            checkMark.isHidden = !isInEditingMode
+        }
+    }
+    override var isSelected: Bool{
+        didSet {
+            if isInEditingMode {
+            checkMark.text = isSelected ? "✔️" : ""
+            }
+        }
+    }
     override func setupView() {
         addSubview(profileImageView)
         addSubview(divider)
@@ -155,6 +213,10 @@ class MessageCell : BaseCell{
         addConstraintsWithFormat(format: "H:|-83-[v0]|", views: divider)
         addConstraintsWithFormat(format: "V:[v0(1)]|", views: divider)
         
+        addSubview(checkMark)
+        addConstraintsWithFormat(format: "H:[v0(30)]-10-|", views: checkMark)
+        addConstraintsWithFormat(format: "V:|[v0(30)]", views: checkMark)
+
         
         
 
