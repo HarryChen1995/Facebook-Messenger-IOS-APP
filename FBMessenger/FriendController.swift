@@ -282,6 +282,6 @@ extension UIView {
             viewDict[key] = view
             
         }
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: format, options: [], metrics: nil, views: viewDict))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: [], metrics: nil, views: viewDict))
     }
 }
